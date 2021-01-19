@@ -193,8 +193,7 @@ func initConfig() {
         viper.SetConfigFile(cfgFile)
     } else {
         viper.AddConfigPath(".")
-        viper.SetConfigName(".config.yaml")
-        viper.SetConfigType("yaml")
+        viper.SetConfigName(".config")
     }
 
     viper.ReadInConfig()
