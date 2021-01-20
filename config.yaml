@@ -3,3 +3,6 @@ secretKey: 8E110D81823C9C5F1A773FCC54415DC8
 scheme: https
 timeout: 20
 sdk_log_level: 3
+log_config:
+  loglevel: info
+  output: ./cloudbatch.log

@@ -6,6 +6,7 @@
 package main
 
 import (
+    _ "cloudbatch/conf"
     "cloudbatch/interact"
     "fmt"
     "io/ioutil"
