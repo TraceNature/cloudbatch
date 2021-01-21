@@ -16,11 +16,12 @@ var vmclient *vmClient.VmClient
 var lbclient *lbClient.LbClient
 var once sync.Once
 
-
+// 获取vm client
 func GetVmClient() *vmClient.VmClient {
     once.Do(func() {
         vmclient = vmClient.NewVmClient(credentials)
     })
+    // 如果配置为true，则可以通过VPC内网调用
     if conf.GetInternal() {
         config.SetEndpoint(VM_ENDPOINT_INTERNAL)
     }
@@ -29,6 +30,7 @@ func GetVmClient() *vmClient.VmClient {
     return vmclient
 }
 
+// 获取Lb client
 func GetLbClient() *lbClient.LbClient {
     once.Do(func() {
         lbclient = lbClient.NewLbClient(credentials)

@@ -34,16 +34,18 @@ func NewCheckUnhealthyBackend() *cobra.Command {
     return cmd
 }
 
+// 获取所有Backends
 func getBackends(regionId string, lbclient *lbClient.LbClient) ([]models.Backend, error) {
     pageSize := 100
     backends := make([]models.Backend, 0)
     req := apis.NewDescribeBackendsRequest(regionId)
     req.SetPageNumber(1)
-    req.SetPageSize(pageSize)
+    req.SetPageSize(10)
     resp, err := lbclient.DescribeBackends(req)
     if err != nil{
         return nil, err
     }
+    // 保存Backends的总数
     var counts int
     if resp.Result.TotalCount % pageSize == 0 {
         counts =resp.Result.TotalCount / pageSize
@@ -64,7 +66,7 @@ func getBackends(regionId string, lbclient *lbClient.LbClient) ([]models.Backend
     return backends, nil
 }
 
-//
+
 func getUnhealthyBackend(cmd *cobra.Command, args []string) {
     lbclient := client.GetLbClient()
     regionId, err := cmd.Flags().GetString("region")

@@ -14,6 +14,7 @@ var credentials *core.Credential
 var config *core.Config
 var logger core.Logger
 
+// 初始化jdcloud-sdk client
 func clientInit() {
     credentials = core.NewCredentials(conf.GetAccessKey(), conf.GetSecretKey())
     config = core.NewConfig()

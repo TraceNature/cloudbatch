@@ -8,8 +8,10 @@ package conf
 import (
     "cloudbatch/commons"
     "cloudbatch/log"
+    "errors"
     "fmt"
     "github.com/spf13/viper"
+    "os"
     "path/filepath"
     "time"
 )
@@ -17,7 +19,10 @@ import (
 var v *viper.Viper
 
 func init() {
-    CloudBatchConfigInit()
+    err := CloudBatchConfigInit()
+    if err != nil {
+        os.Exit(1)
+    }
     logInit()
 }
 
@@ -45,7 +50,7 @@ func logInit() {
 }
 
 // cloudbatch config init
-func CloudBatchConfigInit() {
+func CloudBatchConfigInit() error {
     v = viper.New()
     homeDir, err := commons.HomeDir()
     if err != nil {
@@ -59,44 +64,21 @@ func CloudBatchConfigInit() {
     v.SetConfigName(configName)
     v.SetConfigType("yaml")
 
-    // 判断配置文件是否存在, 不存在则创建
-    //if !commons.FileExists(configDir) {
-    //    // 如果目录不存在，则新建目录
-    //    err = os.MkdirAll(configDir, 0755)
-    //    if err != nil {
-    //        log.Error(configDir + ": NotFound", log.Field("err", err))
-    //        return
-    //    }
-    //    // 新建配置文件
-    //    _, err := os.Create(configAbs)
-    //    if err != nil {
-    //        log.Error(configAbs + " Create Failed", log.Field("err", err))
-    //        return
-    //    }
-    //} else if !commons.FileExists(configAbs){
-    //    // 新建配置文件
-    //    _, err := os.Create(configAbs)
-    //    if err != nil {
-    //        log.Error(configAbs + " Create Failed", log.Field("err", err))
-    //        return
-    //    }
-    //}
+    // 判断配置文件是否存在, 不存在则退出
     if !commons.FileExists(configAbs) {
-        _, err := commons.CreateFile(configAbs)
-        if err != nil {
-            log.Error(err.Error())
-            return
-        }
+        log.Error("config file not found!! file path: " + configAbs)
+        return errors.New("config file not found!! file path: " + configAbs)
     }
     if err := v.ReadInConfig(); err != nil {
         if _, ok := err.(viper.ConfigFileNotFoundError); ok {
             log.Error("ConfigFileNotFoundError", log.Field("err", err))
-            return
+            return err
         } else {
             log.Error("other Error", log.Field("err", err))
-            return
+            return err
         }
     }
+    return nil
 }
 
 func GetAccessKey() string {
