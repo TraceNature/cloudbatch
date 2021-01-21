@@ -7,6 +7,7 @@ import (
     "io"
     "io/ioutil"
     "os"
+    "path/filepath"
 )
 
 //AppendLineToFile 向文件追加行
@@ -80,6 +81,31 @@ func CopyFile(src string, dst string, buffersize int) error {
         if _, err := destination.Write(buf[:n]); err != nil {
             return err
         }
+    }
+    return nil
+}
+
+// 判断文件是否存在，不存在则创建
+func CreateFile(filePath string) (*os.File,error) {
+    dir := filepath.Dir(filePath)
+    if err := MkdirAll(dir, 0755); err != nil {
+        return nil, err
+    }
+    file, err := os.OpenFile(filePath, os.O_RDONLY | os.O_APPEND | os.O_CREATE, 0644)
+    if err != nil {
+        return nil, err
+    }
+    return file, nil
+}
+
+// 判断目录是否存在，如果不存在则创建
+func MkdirAll(dir string, mode os.FileMode) error {
+    if FileExists(dir) {
+        return nil
+    }
+    err := os.MkdirAll(dir, mode)
+    if err != nil {
+        return err
     }
     return nil
 }

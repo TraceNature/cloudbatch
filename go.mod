@@ -8,6 +8,8 @@ require (
 	github.com/chzyer/test v0.0.0-20180213035817-a1ea475d72b1 // indirect
 	github.com/ghodss/yaml v1.0.0
 	github.com/go-redis/redis/v7 v7.4.0
+	github.com/gofrs/uuid v4.0.0+incompatible // indirect
+	github.com/jdcloud-api/jdcloud-sdk-go v1.50.0
 	github.com/mattn/go-shellwords v1.0.10
 	github.com/olekukonko/tablewriter v0.0.4
 	github.com/panjf2000/ants/v2 v2.4.1

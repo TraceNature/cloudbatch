@@ -10,8 +10,8 @@ import (
     "cloudbatch/log"
     "fmt"
     "github.com/spf13/viper"
-    "os"
     "path/filepath"
+    "time"
 )
 
 var v *viper.Viper
@@ -28,14 +28,14 @@ func GetCloudBatchConfig() *viper.Viper {
 // log init
 func logInit() {
     // 设置日志级别
-    loglevel := v.GetString("log_config.loglevel")
+    loglevel := v.GetString("logConfig.loglevel")
     if loglevel != "" {
         log.SetLevel(loglevel)
     }
     // 将log写入指定文件
-    logFile := v.GetString("log_config.output")
+    logFile := v.GetString("logConfig.output")
     if logFile != "" {
-        file, err := os.OpenFile(logFile, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644)
+        file, err := commons.CreateFile(logFile)
         if err != nil {
             fmt.Printf("open log file '%s' error:%s\n", logFile, err)
             return
@@ -59,25 +59,32 @@ func CloudBatchConfigInit() {
     v.SetConfigName(configName)
     v.SetConfigType("yaml")
 
-    // 判断配置文件路径是否存在
-    if !commons.FileExists(configDir) {
-        // 如果目录不存在，则新建目录
-        err = os.MkdirAll(configDir, 0755)
+    // 判断配置文件是否存在, 不存在则创建
+    //if !commons.FileExists(configDir) {
+    //    // 如果目录不存在，则新建目录
+    //    err = os.MkdirAll(configDir, 0755)
+    //    if err != nil {
+    //        log.Error(configDir + ": NotFound", log.Field("err", err))
+    //        return
+    //    }
+    //    // 新建配置文件
+    //    _, err := os.Create(configAbs)
+    //    if err != nil {
+    //        log.Error(configAbs + " Create Failed", log.Field("err", err))
+    //        return
+    //    }
+    //} else if !commons.FileExists(configAbs){
+    //    // 新建配置文件
+    //    _, err := os.Create(configAbs)
+    //    if err != nil {
+    //        log.Error(configAbs + " Create Failed", log.Field("err", err))
+    //        return
+    //    }
+    //}
+    if !commons.FileExists(configAbs) {
+        _, err := commons.CreateFile(configAbs)
         if err != nil {
-            log.Error(configDir + ": NotFound", log.Field("err", err))
-            return
-        }
-        // 新建配置文件
-        _, err := os.Create(configAbs)
-        if err != nil {
-            log.Error(configAbs + " Create Failed", log.Field("err", err))
-            return
-        }
-    } else if !commons.FileExists(configAbs){
-        // 新建配置文件
-        _, err := os.Create(configAbs)
-        if err != nil {
-            log.Error(configAbs + " Create Failed", log.Field("err", err))
+            log.Error(err.Error())
             return
         }
     }
@@ -90,4 +97,28 @@ func CloudBatchConfigInit() {
             return
         }
     }
+}
+
+func GetAccessKey() string {
+    return v.GetString("accessKey")
+}
+
+func GetSecretKey() string {
+    return v.GetString("secretKey")
+}
+
+func GetTimeout() time.Duration {
+    return v.GetDuration("timeout") * time.Second
+}
+
+func GetSdkLogLevel() int {
+    return v.GetInt("sdkLogLevel")
+}
+
+func GetScheme() string {
+    return v.GetString("scheme")
+}
+
+func GetInternal() bool {
+    return v.GetBool("internal")
 }

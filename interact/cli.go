@@ -114,6 +114,7 @@ func getBasicCmd() *cobra.Command {
 
     rootCmd.AddCommand(
         cmd.NewVmCommand(),
+        cmd.NewLbCommand(),
     )
 
     rootCmd.Flags().ParseErrorsWhitelist.UnknownFlags = true
