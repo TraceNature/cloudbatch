@@ -1,5 +1,5 @@
-accessKey: EE35CF02BF28533628A64594A8641E04
-secretKey: 8E110D81823C9C5F1A773FCC54415DC8
+accessKey:
+secretKey:
 scheme: https
 timeout: 20
 sdk_log_level: 3
