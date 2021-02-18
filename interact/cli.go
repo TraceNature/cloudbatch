@@ -210,7 +210,7 @@ func initConfig() {
 func loop() {
     rl, err := readline.NewEx(&readline.Config{
         //Prompt:            "\033[31m»\033[0m ",
-        Prompt:                 "RedisCompare> ",
+        Prompt:                 "CloudBatch> ",
         HistoryFile:            "/tmp/readline.tmp",
         AutoComplete:           readlinecompleter,
         DisableAutoSaveHistory: true,
@@ -251,7 +251,7 @@ func loop() {
         }
         cmd := strings.Join(cmds, " ")
         cmds = cmds[:0]
-        rl.SetPrompt("RedisCompare> ")
+        rl.SetPrompt("CloudBatch> ")
         rl.SaveHistory(cmd)
 
         args, err := shellwords.Parse(cmd)
