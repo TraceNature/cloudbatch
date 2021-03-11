@@ -1,0 +1,55 @@
+command:
+  waf: adddomains
+spec:
+  - wafInstanceId: waf-ins_cn-north-1_fd3221b198a9
+    domain: www.xinyulu3344.cn
+    protocols:
+      - https
+    sslProtocols:
+      - TLSv1.1
+      - TLSv1.2
+      - TLSv1
+    lbType: rr
+    rsConfig:
+      rsAddr:
+        - 114.67.234.49
+      weight:
+      httpRsPort: []
+      httpsRsPort:
+        - '443'
+      rsType: 0
+    pureClient: 1
+    httpsRedirect: 1
+    rsOnlySupportHttp: 0
+    httpVersion: http1.1
+    enableKeepalive: 1
+    suiteLevel: 0
+    enableUnderscores: 0
+    disableHealthCheck:
+    proxyConnectTimeout:
+  - wafInstanceId: waf-ins_cn-north-1_fd3221b198a9
+    domain: www.xinyulu3344.cn
+    protocols:
+      - https
+    sslProtocols:
+      - TLSv1.1
+      - TLSv1.2
+      - TLSv1
+    lbType: rr
+    rsConfig:
+      rsAddr:
+        - 114.67.234.49
+      weight:
+      httpRsPort: []
+      httpsRsPort:
+        - '443'
+      rsType: 0
+    pureClient: 1
+    httpsRedirect: 1
+    rsOnlySupportHttp: 0
+    httpVersion: http1.1
+    enableKeepalive: 1
+    suiteLevel: 0
+    enableUnderscores: 0
+    disableHealthCheck:
+    proxyConnectTimeout:

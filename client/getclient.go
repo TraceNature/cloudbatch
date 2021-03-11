@@ -9,11 +9,13 @@ import (
     "cloudbatch/conf"
     lbClient "github.com/jdcloud-api/jdcloud-sdk-go/services/lb/client"
     vmClient "github.com/jdcloud-api/jdcloud-sdk-go/services/vm/client"
+    wafClient "github.com/jdcloud-api/jdcloud-sdk-go/services/waf/client"
     "sync"
 )
 
 var vmclient *vmClient.VmClient
 var lbclient *lbClient.LbClient
+var wafclient *wafClient.WafClient
 var once sync.Once
 
 // 获取vm client
@@ -28,6 +30,19 @@ func GetVmClient() *vmClient.VmClient {
     vmclient.SetConfig(config)
     vmclient.SetLogger(logger)
     return vmclient
+}
+
+// 获取waf client
+func GetWafClient() *wafClient.WafClient {
+    once.Do(func() {
+        wafclient = wafClient.NewWafClient(credentials)
+    })
+    if conf.GetInternal() {
+        config.SetEndpoint(WAF_ENDPOINT_INTERNAL)
+    }
+    wafclient.SetConfig(config)
+    wafclient.SetLogger(logger)
+    return wafclient
 }
 
 // 获取Lb client
