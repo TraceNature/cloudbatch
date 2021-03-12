@@ -175,12 +175,16 @@ func addDomainFunc(cmd *cobra.Command, args []string) {
 		domainConfig.Domains = append(domainConfig.Domains, *domain)
 	}
 	// 调用接口
-	wafAddDomainRequestSend(regionId, domainConfig)
-	// 输出报表
-	log.Info("success!!")
+	reqSuccess := wafAddDomainRequestSend(regionId, domainConfig)
+	if reqSuccess {
+		// 输出报表
+		log.Info("Add Domain success!!")
+	} else {
+		log.Error("Add Domain Failed!!")
+	}
 }
 
-func wafAddDomainRequestSend(regionId string, domainConfig *DomainsConfig) {
+func wafAddDomainRequestSend(regionId string, domainConfig *DomainsConfig) bool {
 	wafclient := client.GetWafClient()
 	for _, domain := range domainConfig.Domains {
 		req := apis.NewAddDomainRequest(regionId, domain.WafInstanceId, &domain)
@@ -188,13 +192,14 @@ func wafAddDomainRequestSend(regionId string, domainConfig *DomainsConfig) {
 		resp, err := wafclient.AddDomain(req)
 		if err != nil {
 			log.Error(err.Error())
-			return
+			return false
 		}
 		if resp.Error.Code != 200 {
 			log.Error("", log.Field("resp", resp))
-			return
+			return false
 		} else {
 			log.Info("", log.Field("resp", resp))
 		}
 	}
+	return true
 }
