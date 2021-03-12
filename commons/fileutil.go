@@ -91,7 +91,7 @@ func CreateFile(filePath string) (*os.File,error) {
     if err := MkdirAll(dir, 0755); err != nil {
         return nil, err
     }
-    file, err := os.OpenFile(filePath, os.O_RDONLY | os.O_APPEND | os.O_CREATE, 0644)
+    file, err := os.OpenFile(filePath, os.O_RDWR | os.O_APPEND | os.O_CREATE, 0644)
     if err != nil {
         return nil, err
     }
