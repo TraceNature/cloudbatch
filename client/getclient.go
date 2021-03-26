@@ -10,12 +10,14 @@ import (
     lbClient "github.com/jdcloud-api/jdcloud-sdk-go/services/lb/client"
     vmClient "github.com/jdcloud-api/jdcloud-sdk-go/services/vm/client"
     wafClient "github.com/jdcloud-api/jdcloud-sdk-go/services/waf/client"
+    cdnClient "github.com/jdcloud-api/jdcloud-sdk-go/services/cdn/client"
     "sync"
 )
 
 var vmclient *vmClient.VmClient
 var lbclient *lbClient.LbClient
 var wafclient *wafClient.WafClient
+var cdnclient *cdnClient.CdnClient
 var once sync.Once
 
 // 获取vm client
@@ -56,4 +58,17 @@ func GetLbClient() *lbClient.LbClient {
     lbclient.SetConfig(config)
     lbclient.SetLogger(logger)
     return lbclient
+}
+
+// 获取cdn client
+func GetCdnClient() *cdnClient.CdnClient {
+    once.Do(func() {
+        cdnclient = cdnClient.NewCdnClient(credentials)
+    })
+    if conf.GetInternal() {
+        config.SetEndpoint(LB_ENDPOINT_INTERNAL)
+    }
+    cdnclient.SetConfig(config)
+    cdnclient.SetLogger(logger)
+    return cdnclient
 }

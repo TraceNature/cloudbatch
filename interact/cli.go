@@ -113,9 +113,10 @@ func getBasicCmd() *cobra.Command {
     rootCmd.PersistentFlags().BoolVarP(&commandFlags.Help, "help", "h", false, "help message")
 
     rootCmd.AddCommand(
-        cmd.NewVmCommand(),
+        // cmd.NewVmCommand(),
         cmd.NewLbCommand(),
         cmd.NewWafCommand(),
+        cmd.NewCdnCommand(),
     )
 
     rootCmd.Flags().ParseErrorsWhitelist.UnknownFlags = true
